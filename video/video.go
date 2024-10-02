@@ -30,5 +30,18 @@ func GetDuration(inputPath string) (float64, error) {
 }
 
 func CreateVideoFromGif(inputPath string, duration uint, outputPath string) error {
-	return nil
+	inputDuration, err := GetDuration(inputPath)
+
+	if err != nil {
+		return err
+	}
+
+	loopCount := uint(duration / uint(inputDuration))
+	err = ffmpeg.Input(inputPath, ffmpeg.KwArgs{
+		"stream_loop": loopCount,
+	}).Output(outputPath, ffmpeg.KwArgs{
+		"t": duration,
+	}).Run()
+
+	return err
 }
