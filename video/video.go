@@ -1,6 +1,8 @@
 package video
 
 import (
+	"errors"
+
 	"github.com/tidwall/gjson"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
@@ -29,14 +31,43 @@ func GetDuration(inputPath string) (float64, error) {
 	return gjson.Get(out, "format.duration").Float(), nil
 }
 
-func CreateVideoFromGif(inputPath string, duration uint, outputPath string) error {
+func AddAudioToVideo(inputVideoPath string, inputAudioPath string, outputPath string) error {
+
+	if inputAudioPath == "" {
+		return errors.New("audio path is empty")
+	}
+
+	if inputVideoPath == "" {
+		return errors.New("video path is empty")
+	}
+
+	if outputPath == "" {
+		return errors.New("output path is empty")
+	}
+
+	if outputPath == inputVideoPath || outputPath == inputAudioPath {
+		return errors.New("output path is the same as input path")
+	}
+
+	err := ffmpeg.Input(inputAudioPath, ffmpeg.KwArgs{
+		"i": inputVideoPath,
+	}).Output(outputPath, ffmpeg.KwArgs{
+		"map":      []string{"0:v", "1:a"},
+		"c":        "copy",
+		"shortest": "",
+	}).Run()
+
+	return err
+}
+
+func CreateVideoFromGif(inputPath string, duration float64, outputPath string) error {
 	inputDuration, err := GetDuration(inputPath)
 
 	if err != nil {
 		return err
 	}
 
-	loopCount := uint(duration / uint(inputDuration))
+	loopCount := uint64(duration / inputDuration)
 	err = ffmpeg.Input(inputPath, ffmpeg.KwArgs{
 		"stream_loop": loopCount,
 	}).Output(outputPath, ffmpeg.KwArgs{
