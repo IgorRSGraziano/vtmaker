@@ -91,3 +91,30 @@ func TestAddAudioToVideo(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestAddSubtitleToVideo(t *testing.T) {
+	videoOutput := path.Join(testDir, "output.mp4")
+	subtitleOutput := path.Join(testDir, "subtitle.srt")
+	finalVideoOutput := path.Join(testDir, "final_output.mp4")
+
+	defer os.Remove(videoOutput)
+	defer os.Remove(finalVideoOutput)
+
+	duration, err := video.GetDuration(sampleMusic)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = video.CreateVideoFromGif(sampleGifPath, duration, videoOutput)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = video.AddSubtitleToVideo(videoOutput, subtitleOutput, finalVideoOutput)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+}

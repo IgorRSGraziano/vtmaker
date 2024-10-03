@@ -76,3 +76,29 @@ func CreateVideoFromGif(inputPath string, duration float64, outputPath string) e
 
 	return err
 }
+
+func AddSubtitleToVideo(inputVideoPath string, inputSubtitlePath string, outputPath string) error {
+	if inputSubtitlePath == "" {
+		return errors.New("subtitle path is empty")
+	}
+
+	if inputVideoPath == "" {
+		return errors.New("video path is empty")
+	}
+
+	if outputPath == "" {
+		return errors.New("output path is empty")
+	}
+
+	if outputPath == inputVideoPath || outputPath == inputSubtitlePath {
+		return errors.New("output path is the same as input path")
+	}
+
+	// ffmpeg -vf subtitles=/home/prplexx/projects/vtmaker/video/gif/_testData/subtitle.srt -i /home/prplexx/projects/vtmaker/video/gif/_testData/output.mp4 /home/prplexx/projects/vtmaker/video/gif/_testData/final_output.mp4
+
+	err := ffmpeg.Input(inputVideoPath).Output(outputPath, ffmpeg.KwArgs{
+		"vf": "subtitles=" + inputSubtitlePath,
+	}).Run()
+
+	return err
+}
