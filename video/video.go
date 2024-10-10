@@ -106,6 +106,7 @@ func AddSubtitleToVideo(inputVideoPath string, inputSubtitlePath string, outputP
 func NormalizeVideo(inputPath string, outputPath string) error {
 	// ffmpeg -i <input> -c:v libx264 -profile:v baseline -level 3.0 -pix_fmt yuv420p <output>
 	err := ffmpeg.Input(inputPath).Output(outputPath, ffmpeg.KwArgs{
+		"vf":        "pad=ceil(iw/2)*2:ceil(ih/2)*2",
 		"c:v":       "libx264",
 		"profile:v": "baseline",
 		"level":     "3.0",

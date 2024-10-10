@@ -69,14 +69,12 @@ func main() {
 	}
 
 	gifVideoPath := path.Join(tempFolder, createTempFile("mp4"))
-	defer os.Remove(gifVideoPath)
 
 	if err := video.CreateVideoFromGif(gifFilePath, musicDuration, gifVideoPath); err != nil {
 		panic(err)
 	}
 
 	videoSubtitlePath := path.Join(tempFolder, createTempFile("mp4"))
-	defer os.Remove(videoSubtitlePath)
 
 	if err := video.AddSubtitleToVideo(gifVideoPath, strFilePath, videoSubtitlePath); err != nil {
 		panic(err)
