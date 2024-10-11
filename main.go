@@ -10,7 +10,6 @@ import (
 
 func main() {
 	args := GetArgs()
-	fmt.Println(args)
 
 	video, err := video.NewVideo(args.SubtitlePath, args.AudioPath, args.GifPath)
 

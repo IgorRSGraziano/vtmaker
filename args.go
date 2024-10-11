@@ -88,5 +88,15 @@ func GetArgs() *Args {
 
 	setDefaultArgs(args)
 
+	switch {
+	case args.AudioPath == "":
+		log.Fatal("Audio path is required")
+	case args.GifPath == "":
+		log.Fatal("Gif path is required")
+	case args.SubtitlePath == "":
+		log.Fatal("Subtitle path is required")
+
+	}
+
 	return args
 }
