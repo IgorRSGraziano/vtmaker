@@ -1,9 +1,10 @@
 package main
 
 import (
+	"log"
 	"os"
 	"path"
-	"vtmaker/random"
+	"vtmaker/file"
 	"vtmaker/video"
 )
 
@@ -50,44 +51,56 @@ func main() {
 		panic("gif file not found")
 	}
 
-	tempFolder := path.Join(dataDir, "temp")
-
-	defer os.RemoveAll(tempFolder)
-
-	if err := os.Mkdir(tempFolder, 0755); err != nil {
-		panic(err)
-	}
-
-	musicDuration, err := video.GetDuration(mp3FilePath)
+	video, err := video.NewVideo(strFilePath, mp3FilePath, gifFilePath)
 
 	if err != nil {
 		panic(err)
 	}
 
-	createTempFile := func(format string) string {
-		return random.NewSHA1Hash(8) + "." + format
+	// defer video.Flush()
+
+	video.CreateFromGif().AddSubtitle().AddAudio().Normalize()
+
+	if video.Error != nil {
+		panic(video.Error)
 	}
 
-	gifVideoPath := path.Join(tempFolder, createTempFile("mp4"))
-
-	if err := video.CreateFromGif(gifFilePath, musicDuration, gifVideoPath); err != nil {
+	err = file.Copy(video.OutputPath, path.Join(dataDir, "final_output.mp4"))
+	if err != nil {
+		log.Printf("Error moving final output: %v", err)
 		panic(err)
 	}
 
-	videoSubtitlePath := path.Join(tempFolder, createTempFile("mp4"))
+	// musicDuration, err := video.GetDuration(mp3FilePath)
 
-	if err := video.AddSubtitle(gifVideoPath, strFilePath, videoSubtitlePath); err != nil {
-		panic(err)
-	}
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	finalOutputPath := path.Join(tempFolder, createTempFile("mp4"))
-	if err := video.AddAudio(videoSubtitlePath, mp3FilePath, finalOutputPath); err != nil {
-		panic(err)
-	}
+	// createTempFile := func(format string) string {
+	// 	return random.NewSHA1Hash(8) + "." + format
+	// }
 
-	finalFile := path.Join(dataDir, "final_output.mp4")
-	if err := video.Normalize(finalOutputPath, finalFile); err != nil {
-		panic(err)
-	}
+	// gifVideoPath := path.Join(tempFolder, createTempFile("mp4"))
+
+	// if err := video.CreateFromGif(gifFilePath, musicDuration, gifVideoPath); err != nil {
+	// 	panic(err)
+	// }
+
+	// videoSubtitlePath := path.Join(tempFolder, createTempFile("mp4"))
+
+	// if err := video.AddSubtitle(gifVideoPath, strFilePath, videoSubtitlePath); err != nil {
+	// 	panic(err)
+	// }
+
+	// finalOutputPath := path.Join(tempFolder, createTempFile("mp4"))
+	// if err := video.AddAudio(videoSubtitlePath, mp3FilePath, finalOutputPath); err != nil {
+	// 	panic(err)
+	// }
+
+	// finalFile := path.Join(dataDir, "final_output.mp4")
+	// if err := video.Normalize(finalOutputPath, finalFile); err != nil {
+	// 	panic(err)
+	// }
 
 }
