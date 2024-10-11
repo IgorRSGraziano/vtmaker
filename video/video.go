@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"vtmaker/file"
 )
 
 type Video struct {
@@ -16,22 +17,30 @@ type Video struct {
 }
 
 func NewVideo(srtFilePath, mp3FilePath, gifFilePath string) (*Video, error) {
-	if !fileExists(srtFilePath) {
+	if !file.Exists(srtFilePath) {
 		log.Printf("Subtitle file not found: %s", srtFilePath)
 		return nil, os.ErrNotExist
 	}
 
-	if !fileExists(mp3FilePath) {
+	if !file.Exists(mp3FilePath) {
 		log.Printf("MP3 file not found: %s", mp3FilePath)
 		return nil, os.ErrNotExist
 	}
 
-	if !fileExists(gifFilePath) {
+	if !file.Exists(gifFilePath) {
 		log.Printf("GIF file not found: %s", gifFilePath)
 		return nil, os.ErrNotExist
 	}
 
 	tmpFolder := path.Join(os.TempDir(), "vtmaker")
+
+	if file.Exists(tmpFolder) {
+		if err := os.RemoveAll(tmpFolder); err != nil {
+			log.Printf("Error removing temp folder: %v", err)
+			return nil, err
+		}
+		log.Printf("Temp folder already exists, removing it %s", tmpFolder)
+	}
 
 	if err := os.MkdirAll(tmpFolder, 0755); err != nil {
 		log.Printf("Error creating temp folder: %v", err)

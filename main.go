@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 	"vtmaker/file"
 	"vtmaker/video"
 )
@@ -23,6 +24,27 @@ func main() {
 
 	if video.Error != nil {
 		panic(video.Error)
+	}
+
+	alreadyExists := file.Exists(args.OutputPath)
+
+	if alreadyExists {
+		log.Printf("File %s already exists", args.OutputPath)
+		log.Printf("Do you want to overwrite it? [y/n]")
+		var answer string
+		fmt.Scanln(&answer)
+
+		if answer != "y" {
+			log.Println("Exiting...")
+			return
+		}
+
+		err = os.Remove(args.OutputPath)
+
+		if err != nil {
+			log.Printf("Error removing file: %v", err)
+			panic(err)
+		}
 	}
 
 	err = file.Copy(video.OutputPath, args.OutputPath)

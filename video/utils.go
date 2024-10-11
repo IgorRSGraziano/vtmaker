@@ -1,16 +1,9 @@
 package video
 
 import (
-	"os"
-
 	"github.com/tidwall/gjson"
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
-
-func fileExists(filePath string) bool {
-	_, err := os.Stat(filePath)
-	return err == nil
-}
 
 func GetDuration(inputPath string) (float64, error) {
 	out, err := ffmpeg.Probe(inputPath, []ffmpeg.KwArgs{
