@@ -4,7 +4,7 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-func CreateVideoFromGif(inputPath string, duration float64, outputPath string) error {
+func CreateFromGif(inputPath string, duration float64, outputPath string) error {
 	inputDuration, err := GetDuration(inputPath)
 
 	if err != nil {

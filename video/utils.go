@@ -18,7 +18,7 @@ func GetDuration(inputPath string) (float64, error) {
 	return gjson.Get(out, "format.duration").Float(), nil
 }
 
-func NormalizeVideo(inputPath string, outputPath string) error {
+func Normalize(inputPath string, outputPath string) error {
 	err := ffmpeg.Input(inputPath).Output(outputPath, ffmpeg.KwArgs{
 		"vf":        "pad=ceil(iw/2)*2:ceil(ih/2)*2",
 		"c:v":       "libx264",

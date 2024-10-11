@@ -70,23 +70,23 @@ func main() {
 
 	gifVideoPath := path.Join(tempFolder, createTempFile("mp4"))
 
-	if err := video.CreateVideoFromGif(gifFilePath, musicDuration, gifVideoPath); err != nil {
+	if err := video.CreateFromGif(gifFilePath, musicDuration, gifVideoPath); err != nil {
 		panic(err)
 	}
 
 	videoSubtitlePath := path.Join(tempFolder, createTempFile("mp4"))
 
-	if err := video.AddSubtitleToVideo(gifVideoPath, strFilePath, videoSubtitlePath); err != nil {
+	if err := video.AddSubtitle(gifVideoPath, strFilePath, videoSubtitlePath); err != nil {
 		panic(err)
 	}
 
 	finalOutputPath := path.Join(tempFolder, createTempFile("mp4"))
-	if err := video.AddAudioToVideo(videoSubtitlePath, mp3FilePath, finalOutputPath); err != nil {
+	if err := video.AddAudio(videoSubtitlePath, mp3FilePath, finalOutputPath); err != nil {
 		panic(err)
 	}
 
 	finalFile := path.Join(dataDir, "final_output.mp4")
-	if err := video.NormalizeVideo(finalOutputPath, finalFile); err != nil {
+	if err := video.Normalize(finalOutputPath, finalFile); err != nil {
 		panic(err)
 	}
 

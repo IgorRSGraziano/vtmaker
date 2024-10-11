@@ -6,7 +6,7 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-func AddSubtitleToVideo(inputVideoPath string, inputSubtitlePath string, outputPath string) error {
+func AddSubtitle(inputVideoPath string, inputSubtitlePath string, outputPath string) error {
 	if inputSubtitlePath == "" {
 		return errors.New("subtitle path is empty")
 	}

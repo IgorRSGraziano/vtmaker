@@ -43,7 +43,7 @@ func TestCreateVideoFromGif(t *testing.T) {
 
 	var duration float64 = 120
 
-	err := video.CreateVideoFromGif(sampleGifPath, duration, outputPath)
+	err := video.CreateFromGif(sampleGifPath, duration, outputPath)
 
 	if err != nil {
 		t.Fatal(err)
@@ -79,13 +79,13 @@ func TestAddAudioToVideo(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = video.CreateVideoFromGif(sampleGifPath, duration, videoOutput)
+	err = video.CreateFromGif(sampleGifPath, duration, videoOutput)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = video.AddAudioToVideo(videoOutput, sampleMusic, finalVideoOutput)
+	err = video.AddAudio(videoOutput, sampleMusic, finalVideoOutput)
 
 	if err != nil {
 		t.Fatal(err)
@@ -106,13 +106,13 @@ func TestAddSubtitleToVideo(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	err = video.CreateVideoFromGif(sampleGifPath, duration, videoOutput)
+	err = video.CreateFromGif(sampleGifPath, duration, videoOutput)
 
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	err = video.AddSubtitleToVideo(videoOutput, subtitleOutput, finalVideoOutput)
+	err = video.AddSubtitle(videoOutput, subtitleOutput, finalVideoOutput)
 
 	if err != nil {
 		t.Fatal(err)

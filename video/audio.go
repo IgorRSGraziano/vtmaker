@@ -6,7 +6,7 @@ import (
 	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
-func AddAudioToVideo(inputVideoPath string, inputAudioPath string, outputPath string) error {
+func AddAudio(inputVideoPath string, inputAudioPath string, outputPath string) error {
 
 	if inputAudioPath == "" {
 		return errors.New("audio path is empty")
