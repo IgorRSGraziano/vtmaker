@@ -30,7 +30,7 @@ func AddAudio(inputVideoPath string, inputAudioPath string, outputPath string) e
 		"map":      []string{"0:v", "1:a"},
 		"c":        "copy",
 		"shortest": "",
-	}).Run()
+	}).ErrorToStdOut().Run()
 
 	return err
 }

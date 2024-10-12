@@ -16,7 +16,7 @@ func CreateFromGif(inputPath string, duration float64, outputPath string) error 
 		"stream_loop": loopCount,
 	}).Output(outputPath, ffmpeg.KwArgs{
 		"t": duration,
-	}).Run()
+	}).ErrorToStdOut().Run()
 
 	return err
 }

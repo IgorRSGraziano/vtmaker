@@ -43,13 +43,15 @@ func setDefaultArgs(args *Args) {
 				continue
 			}
 
-			switch path.Ext(file.Name()) {
-			case ".srt":
-				args.SubtitlePath = path.Join(args.FolderPath, file.Name())
-			case ".mp3":
-				args.AudioPath = path.Join(args.FolderPath, file.Name())
-			case ".gif":
-				args.GifPath = path.Join(args.FolderPath, file.Name())
+			fileExt := path.Ext(file.Name())
+			filePaths := map[string]*string{
+				".srt": &args.SubtitlePath,
+				".mp3": &args.AudioPath,
+				".gif": &args.GifPath,
+			}
+
+			if pathPointer, exists := filePaths[fileExt]; exists && *pathPointer == "" {
+				*pathPointer = path.Join(args.FolderPath, file.Name())
 			}
 		}
 	}
@@ -95,7 +97,6 @@ func GetArgs() *Args {
 		log.Fatal("Gif path is required")
 	case args.SubtitlePath == "":
 		log.Fatal("Subtitle path is required")
-
 	}
 
 	return args

@@ -25,7 +25,7 @@ func Normalize(inputPath string, outputPath string) error {
 		"profile:v": "baseline",
 		"level":     "3.0",
 		"pix_fmt":   "yuv420p",
-	}).Run()
+	}).ErrorToStdOut().Run()
 
 	return err
 }

@@ -25,7 +25,7 @@ func AddSubtitle(inputVideoPath string, inputSubtitlePath string, outputPath str
 
 	err := ffmpeg.Input(inputVideoPath).Output(outputPath, ffmpeg.KwArgs{
 		"vf": "subtitles=" + inputSubtitlePath,
-	}).Run()
+	}).ErrorToStdOut().Run()
 
 	return err
 }

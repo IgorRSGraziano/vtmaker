@@ -1,7 +1,7 @@
 package video
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path"
 	"vtmaker/file"
@@ -18,17 +18,17 @@ type Video struct {
 
 func NewVideo(srtFilePath, mp3FilePath, gifFilePath string) (*Video, error) {
 	if !file.Exists(srtFilePath) {
-		log.Printf("Subtitle file not found: %s", srtFilePath)
+		fmt.Printf("Subtitle file not found: %s", srtFilePath)
 		return nil, os.ErrNotExist
 	}
 
 	if !file.Exists(mp3FilePath) {
-		log.Printf("MP3 file not found: %s", mp3FilePath)
+		fmt.Printf("MP3 file not found: %s", mp3FilePath)
 		return nil, os.ErrNotExist
 	}
 
 	if !file.Exists(gifFilePath) {
-		log.Printf("GIF file not found: %s", gifFilePath)
+		fmt.Printf("GIF file not found: %s", gifFilePath)
 		return nil, os.ErrNotExist
 	}
 
@@ -36,14 +36,14 @@ func NewVideo(srtFilePath, mp3FilePath, gifFilePath string) (*Video, error) {
 
 	if file.Exists(tmpFolder) {
 		if err := os.RemoveAll(tmpFolder); err != nil {
-			log.Printf("Error removing temp folder: %v", err)
+			fmt.Printf("Error removing temp folder: %v", err)
 			return nil, err
 		}
-		log.Printf("Temp folder already exists, removing it %s", tmpFolder)
+		fmt.Printf("Temp folder already exists, removing it %s", tmpFolder)
 	}
 
 	if err := os.MkdirAll(tmpFolder, 0755); err != nil {
-		log.Printf("Error creating temp folder: %v", err)
+		fmt.Printf("Error creating temp folder: %v", err)
 		return nil, err
 	}
 
@@ -69,7 +69,7 @@ func (v *Video) CreateFromGif() *Video {
 	duration, err := GetDuration(v.Mp3FilePath)
 
 	if err != nil {
-		log.Printf("Error getting duration of gif: %v", err)
+		fmt.Printf("Error getting duration of sound: %v", err)
 		v.Error = err
 		return v
 	}
@@ -77,7 +77,7 @@ func (v *Video) CreateFromGif() *Video {
 	err = CreateFromGif(v.GifFilePath, duration, outputPath)
 
 	if err != nil {
-		log.Printf("Error creating video from gif: %v", err)
+		fmt.Printf("Error creating video from gif: %v", err)
 		v.Error = err
 		return v
 	}
@@ -97,7 +97,7 @@ func (v *Video) AddSubtitle() *Video {
 	err := AddSubtitle(v.OutputPath, v.SrtFilePath, outputPath)
 
 	if err != nil {
-		log.Printf("Error adding subtitle to video: %v", err)
+		fmt.Printf("Error adding subtitle to video: %v", err)
 		v.Error = err
 		return v
 	}
@@ -117,7 +117,7 @@ func (v *Video) Normalize() *Video {
 	err := Normalize(v.OutputPath, outputPath)
 
 	if err != nil {
-		log.Printf("Error normalizing video: %v", err)
+		fmt.Printf("Error normalizing video: %v", err)
 		v.Error = err
 		return v
 	}
@@ -137,7 +137,7 @@ func (v *Video) AddAudio() *Video {
 	err := AddAudio(v.OutputPath, v.Mp3FilePath, outputPath)
 
 	if err != nil {
-		log.Printf("Error adding audio to video: %v", err)
+		fmt.Printf("Error adding audio to video: %v", err)
 		v.Error = err
 		return v
 	}

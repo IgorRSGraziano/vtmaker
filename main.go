@@ -11,6 +11,10 @@ import (
 func main() {
 	args := GetArgs()
 
+	fmt.Printf("Gif: %s\n", args.GifPath)
+	fmt.Printf("Audio: %s\n", args.AudioPath)
+	fmt.Printf("Subtitle: %s\n", args.SubtitlePath)
+
 	video, err := video.NewVideo(args.SubtitlePath, args.AudioPath, args.GifPath)
 
 	if err != nil {
